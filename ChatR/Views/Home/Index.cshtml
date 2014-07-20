@@ -32,6 +32,10 @@
                 html += "</article>";
 
                 $('#chatContainer').append(html);
+
+                var $t = $('#chatContainer');
+                var scrollTo = $('#chatContainer')[0].scrollHeight + 50;
+                $("#chatContainer").slimScroll({ scrollTo: scrollTo });
             };
             // Get the user name and store it to prepend to messages.
             $('#displayname').val(prompt('Enter your name:', ''));
@@ -41,22 +45,31 @@
 
             // Start the connection.
             $.connection.hub.start().done(function () {
-                $('#sendMessage').click(function () {
-
-                    var $t = $('#chatContainer');
-                    $t.animate({ "scrollTop": $('#chatContainer')[0].scrollHeight }, "slow");
-                    // Call the Send method on the hub.
-                    chat.server.send($('#displayname').val(), $('#messageContainer').val());
-                    // Clear text box and reset focus for next comment.
-                    $('#messageContainer').val('').focus();
+                $("#messageForm").submit(function (e) {
+                    sendMessage();
+                    return false;
                 });
+                //$('#sendMessage').click(function () {
+                //    //$t.animate({ "scrollTop": $('#chatContainer')[0].scrollHeight }, "slow");
+                //    // Call the Send method on the hub.
+                    
+                //});
             });
+
+            function sendMessage() {
+                chat.server.send($('#displayname').val(), $('#messageContainer').val());
+                // Clear text box and reset focus for next comment.
+                $('#messageContainer').val('').focus();
+            }
         });
         // This optional function html-encodes messages for display in the page.
         function htmlEncode(value) {
             var encodedValue = $('<div />').text(value).html();
             return encodedValue;
         }
+
+       
+
     </script>
 }
 <input type="hidden" id="displayname" />
@@ -180,7 +193,7 @@
                                 <article class="chat-item" id="chat-form">
                                     <a class="pull-left thumb-sm avatar"><img src="/Content/ScaleTheme/images/a3.png" class="img-circle"></a>
                                     <section class="chat-body">
-                                        <form action="" class="m-b-none">
+                                        <form action="" class="m-b-none" id="messageForm">
                                             <div class="input-group">
                                                 <input type="text" id="messageContainer" class="form-control" placeholder="Say something">
                                                 <span class="input-group-btn">
