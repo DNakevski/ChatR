@@ -84,10 +84,10 @@
                 };
 
                 var transport = {
-                    sendMessage: function (name, message) {
+                    sendMessage: function (message) {
 
                         if (isReady) {
-                            chat.server.send(name, message);
+                            chat.server.send(message);
                             // Clear text box and reset focus for next comment.
                             $("#" + settings.messageContainer).val('').focus();
                         }
@@ -97,14 +97,14 @@
                         
                     },
 
-                    addMessage: function (name, message) {
+                    addMessage: function (message) {
                         // Add the message to the page.
                         var html = "";
-                        if (name == $("#" + settings.nameContainer).val()) {
-                            html = generator.generateMessage("sending", name, message);
+                        if (message.Name == $("#" + settings.nameContainer).val()) {
+                            html = generator.generateMessage("sending", message.Name, message.MessageText);
                         }
                         else {
-                            html = generator.generateMessage("receiving", name, message);
+                            html = generator.generateMessage("receiving", message.Name, message.MessageText);
                         }
 
                         $("#" + settings.container).append(html);
@@ -139,14 +139,17 @@
             chat.Init();
 
             $("#messageForm").submit(function (e) {
-                chat.SendMessage($("#displayname").val(), $("#messageContainer").val());
+                var name = $("#displayname").val();
+                var text = $("#messageContainer").val();
+                var message = { Name: name, MessageText: text };
+                chat.SendMessage(message);
 
                 return false;
             });
 
             // Create a function that the hub can call back to display messages.
-            chat.GetChat().client.addNewMessageToPage = function (name, message) {
-                chat.AddMessage(name, message);
+            chat.GetChat().client.addNewMessageToPage = function (message) {
+                chat.AddMessage(message);
             };
 
 
