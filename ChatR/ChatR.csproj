@@ -49,6 +49,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -171,8 +173,25 @@
     </Compile>
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ChatREntities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChatREntities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChatREntities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChatREntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChatREntities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChatREntities.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\Message.cs">
+      <DependentUpon>ChatREntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -312,6 +331,23 @@
     <Content Include="Content\ScaleTheme\less\app.widgets.less" />
     <Content Include="Content\ScaleTheme\less\less.php" />
     <Content Include="Content\ScaleTheme\less\lessc.inc.php" />
+    <EntityDeploy Include="Models\ChatREntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ChatREntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\ChatREntities.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ChatREntities.edmx</DependentUpon>
+      <LastGenOutput>ChatREntities.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\ChatREntities.edmx.diagram">
+      <DependentUpon>ChatREntities.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\ChatREntities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ChatREntities.edmx</DependentUpon>
+      <LastGenOutput>ChatREntities.cs</LastGenOutput>
+    </Content>
     <None Include="Properties\PublishProfiles\ChatR - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\ChatR - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -366,6 +402,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
