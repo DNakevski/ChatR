@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
+using ChatR.Entities;
 using ChatR.Models;
 
 namespace ChatR.Controllers
@@ -15,6 +16,8 @@ namespace ChatR.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        private DBChatREntities _db = new DBChatREntities();
+
         public AccountController()
             : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
         {
@@ -38,6 +41,7 @@ namespace ChatR.Controllers
 
         //
         // POST: /Account/Login
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -45,10 +49,14 @@ namespace ChatR.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindAsync(model.UserName, model.Password);
+                //var user = _db.Users
+                //            .Where(x => x.UserName == model.UserName && x.Password == model.Password)
+                //            .FirstOrDefault();
+                var user = new User { Id = 1, UserName = model.UserName, Password = model.Password };
+
                 if (user != null)
                 {
-                    await SignInAsync(user, model.RememberMe);
+                    Session["User"] = user;
                     return RedirectToLocal(returnUrl);
                 }
                 else
@@ -60,6 +68,29 @@ namespace ChatR.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = await UserManager.FindAsync(model.UserName, model.Password);
+        //        if (user != null)
+        //        {
+        //            await SignInAsync(user, model.RememberMe);
+        //            return RedirectToLocal(returnUrl);
+        //        }
+        //        else
+        //        {
+        //            ModelState.AddModelError("", "Invalid username or password.");
+        //        }
+        //    }
+
+        //    // If we got this far, something failed, redisplay form
+        //    return View(model);
+        //}
 
         //
         // GET: /Account/Register

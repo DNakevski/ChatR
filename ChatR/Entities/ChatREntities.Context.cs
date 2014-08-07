@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ChatR.Models
+namespace ChatR.Entities
 {
     using System;
     using System.Data.Entity;
@@ -26,5 +26,6 @@ namespace ChatR.Models
         }
     
         public virtual DbSet<Message> Messages { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }

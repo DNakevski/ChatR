@@ -5,6 +5,7 @@ using System.Web;
 using Microsoft.AspNet.SignalR;
 using System.Threading.Tasks;
 using ChatR.Models;
+using ChatR.Entities;
 
 namespace ChatR.Hubs
 {

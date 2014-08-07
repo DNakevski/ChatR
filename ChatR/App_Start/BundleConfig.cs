@@ -23,6 +23,11 @@ namespace ChatR
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            //The default required SignalR scripts
+            bundles.Add(new ScriptBundle("~/bundles/signalr").Include(
+                    "~/Scripts/jquery.signalR-2.0.0.min.js"
+                ));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));

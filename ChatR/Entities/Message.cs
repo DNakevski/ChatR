@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ChatR.Models
+namespace ChatR.Entities
 {
     using System;
     using System.Collections.Generic;

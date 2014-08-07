@@ -4,16 +4,19 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ChatR.Models;
+using ChatR.Filters;
 
 namespace ChatR.Controllers
 {
     public class HomeController : Controller
     {
+        [AuthorizeUser]
         public ActionResult Index()
         {
             return View();
         }
 
+        [AuthorizeUser]
         public ActionResult Chat()
         {
             return View();
