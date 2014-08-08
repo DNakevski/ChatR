@@ -49,10 +49,9 @@ namespace ChatR.Controllers
         {
             if (ModelState.IsValid)
             {
-                //var user = _db.Users
-                //            .Where(x => x.UserName == model.UserName && x.Password == model.Password)
-                //            .FirstOrDefault();
-                var user = new User { Id = 1, UserName = model.UserName, Password = model.Password };
+                var user = _db.Users
+                            .Where(x => x.UserName == model.UserName && x.Password == model.Password)
+                            .FirstOrDefault();
 
                 if (user != null)
                 {
@@ -92,6 +91,7 @@ namespace ChatR.Controllers
         //    return View(model);
         //}
 
+
         //
         // GET: /Account/Register
         [AllowAnonymous]
@@ -100,8 +100,6 @@ namespace ChatR.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -109,22 +107,53 @@ namespace ChatR.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser() { UserName = model.UserName };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                var user = new User() { UserName = model.UserName, Password = model.Password };
+                
+                try
                 {
-                    await SignInAsync(user, isPersistent: false);
+                    //The below code shoud be extracted to repositories
+                    //Separate CreateUser function that check the existance of the same User
+                    //SaveChanges can be created as a Task and be called with await
+                    var _db = new DBChatREntities();
+                    _db.Users.Add(user);
+                    _db.SaveChanges();
                     return RedirectToAction("Index", "Home");
                 }
-                else
+                catch
                 {
-                    AddErrors(result);
+                    return View(model);
                 }
             }
 
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+        //
+        // POST: /Account/Register
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Register(RegisterViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = new ApplicationUser() { UserName = model.UserName };
+        //        var result = await UserManager.CreateAsync(user, model.Password);
+        //        if (result.Succeeded)
+        //        {
+        //            await SignInAsync(user, isPersistent: false);
+        //            return RedirectToAction("Index", "Home");
+        //        }
+        //        else
+        //        {
+        //            AddErrors(result);
+        //        }
+        //    }
+
+        //    // If we got this far, something failed, redisplay form
+        //    return View(model);
+        //}
 
         //
         // POST: /Account/Disassociate
@@ -316,12 +345,15 @@ namespace ChatR.Controllers
 
         //
         // POST: /Account/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public ActionResult LogOff()
         {
-            AuthenticationManager.SignOut();
-            return RedirectToAction("Index", "Home");
+            //AuthenticationManager.SignOut();
+            //return RedirectToAction("Index", "Home");
+            Session.Abandon();
+            return RedirectToAction("Login");
         }
 
         //

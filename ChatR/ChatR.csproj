@@ -205,6 +205,7 @@
     <Content Include="Content\ScaleTheme\css\animate.css" />
     <Content Include="Content\ScaleTheme\css\app.css" />
     <Content Include="Content\ScaleTheme\css\bootstrap.css" />
+    <Content Include="Content\ScaleTheme\css\custom.css" />
     <Content Include="Content\ScaleTheme\css\font-awesome.min.css" />
     <Content Include="Content\ScaleTheme\css\font.css" />
     <Content Include="Content\ScaleTheme\css\icon.css" />

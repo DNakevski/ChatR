@@ -1,0 +1,21 @@
+﻿body {
+}
+
+.validation-summary-errors {
+    font-size: 12px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+    .validation-summary-errors ul {
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+    }

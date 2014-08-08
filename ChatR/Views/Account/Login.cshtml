@@ -12,15 +12,13 @@
     @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true)
+        @Html.ValidationSummary()
         <div class="list-group">
             <div class="list-group-item">
                 @Html.TextBoxFor(m => m.UserName, new { @class = "form-control no-border", placeholder="Username" })
-                @Html.ValidationMessageFor(m => m.UserName)
             </div>
             <div class="list-group-item">
                 @Html.PasswordFor(m => m.Password, new { @class = "form-control no-border", placeholder="Password" })
-                @Html.ValidationMessageFor(m => m.Password)
             </div>
         </div>
         <button type="submit" class="btn btn-lg btn-primary btn-block">Sign in</button>
