@@ -8,15 +8,16 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
-using ChatR.Entities;
+using ChatR.UnitOfWork;
 using ChatR.Models;
+using ChatR.Entities;
 
 namespace ChatR.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
-        private DBChatREntities _db = new DBChatREntities();
+        private ChatR.UnitOfWork.UnitOfWork _unitOfWork = new ChatR.UnitOfWork.UnitOfWork();
 
         public AccountController()
             : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
@@ -49,9 +50,9 @@ namespace ChatR.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = _db.Users
-                            .Where(x => x.UserName == model.UserName && x.Password == model.Password)
-                            .FirstOrDefault();
+                var user = _unitOfWork.UserRepository
+                    .Get(x => x.UserName == model.UserName && x.Password == model.Password)
+                    .FirstOrDefault();
 
                 if (user != null)
                 {
@@ -111,12 +112,10 @@ namespace ChatR.Controllers
                 
                 try
                 {
-                    //The below code shoud be extracted to repositories
                     //Separate CreateUser function that check the existance of the same User
-                    //SaveChanges can be created as a Task and be called with await
-                    var _db = new DBChatREntities();
-                    _db.Users.Add(user);
-                    _db.SaveChanges();
+
+                    _unitOfWork.UserRepository.Insert(user);
+                    _unitOfWork.Save();
                     return RedirectToAction("Index", "Home");
                 }
                 catch
