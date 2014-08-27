@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ChatR.Models;
-using ChatR.Filters;
+using ChatR.Helpers.Filters;
 
 namespace ChatR.Controllers
 {

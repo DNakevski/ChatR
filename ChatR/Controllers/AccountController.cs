@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using ChatR.UnitOfWork;
 using ChatR.Models;
 using ChatR.Entities;
+using ChatR.Helpers.Hash;
 
 namespace ChatR.Controllers
 {
@@ -51,17 +52,29 @@ namespace ChatR.Controllers
             if (ModelState.IsValid)
             {
                 var user = _unitOfWork.UserRepository
-                    .Get(x => x.UserName == model.UserName && x.Password == model.Password)
+                    .Get(x => x.UserName == model.UserName)
                     .FirstOrDefault();
 
                 if (user != null)
                 {
+                    //Check the password.
+
+                    var salt = HashGenerator.PasswordHexStringToByteArray(user.Salt);
+                    var pass = HashGenerator.CreatePasswordHash(model.Password, salt);
+
+                    //Compare the two hashes.
+                    if (!HashGenerator.SlowEquals(pass, user.Password))
+                    {
+                        ModelState.AddModelError("", "Invalid password.");
+                        return View(model);
+                    }
+
                     Session["User"] = user;
                     return RedirectToLocal(returnUrl);
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Invalid username or password.");
+                    ModelState.AddModelError("", "Invalid username.");
                 }
             }
 
@@ -108,11 +121,21 @@ namespace ChatR.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new User() { UserName = model.UserName, Password = model.Password };
+                //generate new salt 
+                var salt = HashGenerator.GenerateSalt();
+                var password = HashGenerator.CreatePasswordHash(model.Password, salt);
+
+                var user = new User() { UserName = model.UserName, Password = password, Salt = BitConverter.ToString(salt) };
                 
                 try
                 {
                     //Separate CreateUser function that check the existance of the same User
+                    var existingUser = _unitOfWork.UserRepository.Get(x => x.UserName == model.UserName).FirstOrDefault();
+                    if (existingUser != null)
+                    {
+                        ModelState.AddModelError("", "The specified username is already in use by another user.");
+                        return View(model);
+                    }
 
                     _unitOfWork.UserRepository.Insert(user);
                     _unitOfWork.Save();

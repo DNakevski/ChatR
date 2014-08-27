@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace ChatR.Filters
+namespace ChatR.Helpers.Filters
 {
     public class AuthorizeUser : ActionFilterAttribute, IActionFilter
     {
