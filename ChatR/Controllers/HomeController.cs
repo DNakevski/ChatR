@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using ChatR.Models;
 using ChatR.Helpers.Filters;
+using ChatR.Entities;
 
 namespace ChatR.Controllers
 {
@@ -13,6 +14,8 @@ namespace ChatR.Controllers
         [AuthorizeUser]
         public ActionResult Index()
         {
+            var user = (User)Session["User"];
+            ViewBag.UserName = user.UserName;
             return View();
         }
 

@@ -17,7 +17,8 @@
     <script type="text/javascript">
         $(document).ready(function () {
             // Get the user name and store it to prepend to messages.
-            $('#displayname').val(prompt('Enter your name:', ''));
+            var username = "@ViewBag.UserName";
+            $('#displayname').val(username);
 
             var chat = $.chatPlugin({
                 container: "chatContainer",
