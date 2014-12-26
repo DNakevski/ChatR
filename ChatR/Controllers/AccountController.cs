@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ChatR.UnitOfWork;
 using ChatR.Models;
@@ -18,19 +19,27 @@ namespace ChatR.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private ChatR.UnitOfWork.UnitOfWork _unitOfWork = new ChatR.UnitOfWork.UnitOfWork();
+        private ApplicationUserManager _userManager;
+        public int UserId { get { return User.Identity.GetUserId<int>(); } }
 
-        public AccountController()
-            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
+        public ApplicationUserManager UserManager
         {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
         }
 
-        public AccountController(UserManager<ApplicationUser> userManager)
+        public AccountController() { }
+
+        public AccountController(ApplicationUserManager userManager)
         {
             UserManager = userManager;
         }
-
-        public UserManager<ApplicationUser> UserManager { get; private set; }
 
         //
         // GET: /Account/Login
@@ -41,8 +50,6 @@ namespace ChatR.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/Login
 
         [HttpPost]
         [AllowAnonymous]
@@ -51,59 +58,21 @@ namespace ChatR.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = _unitOfWork.UserRepository
-                    .Get(x => x.UserName == model.UserName)
-                    .FirstOrDefault();
-
+                var user = await UserManager.FindAsync(model.UserName, model.Password);
                 if (user != null)
                 {
-                    //Check the password.
-
-                    var salt = HashGenerator.PasswordHexStringToByteArray(user.Salt);
-                    var pass = HashGenerator.CreatePasswordHash(model.Password, salt);
-
-                    //Compare the two hashes.
-                    if (!HashGenerator.SlowEquals(pass, user.Password))
-                    {
-                        ModelState.AddModelError("", "Invalid password.");
-                        return View(model);
-                    }
-
-                    Session["User"] = user;
+                    await SignInAsync(user, model.RememberMe);
                     return RedirectToLocal(returnUrl);
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Invalid username.");
+                    ModelState.AddModelError("", "Invalid username or password.");
                 }
             }
 
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = await UserManager.FindAsync(model.UserName, model.Password);
-        //        if (user != null)
-        //        {
-        //            await SignInAsync(user, model.RememberMe);
-        //            return RedirectToLocal(returnUrl);
-        //        }
-        //        else
-        //        {
-        //            ModelState.AddModelError("", "Invalid username or password.");
-        //        }
-        //    }
-
-        //    // If we got this far, something failed, redisplay form
-        //    return View(model);
-        //}
 
 
         //
@@ -114,6 +83,8 @@ namespace ChatR.Controllers
             return View();
         }
 
+        
+        //POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -121,29 +92,16 @@ namespace ChatR.Controllers
         {
             if (ModelState.IsValid)
             {
-                //generate new salt 
-                var salt = HashGenerator.GenerateSalt();
-                var password = HashGenerator.CreatePasswordHash(model.Password, salt);
-
-                var user = new User() { UserName = model.UserName, Password = password, Salt = BitConverter.ToString(salt) };
-                
-                try
+                var user = new ApplicationUser() { UserName = model.UserName, Email = null };
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
                 {
-                    //Separate CreateUser function that check the existance of the same User
-                    var existingUser = _unitOfWork.UserRepository.Get(x => x.UserName == model.UserName).FirstOrDefault();
-                    if (existingUser != null)
-                    {
-                        ModelState.AddModelError("", "The specified username is already in use by another user.");
-                        return View(model);
-                    }
-
-                    _unitOfWork.UserRepository.Insert(user);
-                    _unitOfWork.Save();
+                    await SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
                 }
-                catch
+                else
                 {
-                    return View(model);
+                    AddErrors(result);
                 }
             }
 
@@ -152,39 +110,13 @@ namespace ChatR.Controllers
         }
 
         //
-        // POST: /Account/Register
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Register(RegisterViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = new ApplicationUser() { UserName = model.UserName };
-        //        var result = await UserManager.CreateAsync(user, model.Password);
-        //        if (result.Succeeded)
-        //        {
-        //            await SignInAsync(user, isPersistent: false);
-        //            return RedirectToAction("Index", "Home");
-        //        }
-        //        else
-        //        {
-        //            AddErrors(result);
-        //        }
-        //    }
-
-        //    // If we got this far, something failed, redisplay form
-        //    return View(model);
-        //}
-
-        //
         // POST: /Account/Disassociate
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Disassociate(string loginProvider, string providerKey)
         {
             ManageMessageId? message = null;
-            IdentityResult result = await UserManager.RemoveLoginAsync(User.Identity.GetUserId(), new UserLoginInfo(loginProvider, providerKey));
+            IdentityResult result = await UserManager.RemoveLoginAsync(UserId, new UserLoginInfo(loginProvider, providerKey));
             if (result.Succeeded)
             {
                 message = ManageMessageId.RemoveLoginSuccess;
@@ -224,7 +156,7 @@ namespace ChatR.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+                    IdentityResult result = await UserManager.ChangePasswordAsync(UserId, model.OldPassword, model.NewPassword);
                     if (result.Succeeded)
                     {
                         return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
@@ -246,7 +178,7 @@ namespace ChatR.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
+                    IdentityResult result = await UserManager.AddPasswordAsync(UserId, model.NewPassword);
                     if (result.Succeeded)
                     {
                         return RedirectToAction("Manage", new { Message = ManageMessageId.SetPasswordSuccess });
@@ -319,7 +251,7 @@ namespace ChatR.Controllers
             {
                 return RedirectToAction("Manage", new { Message = ManageMessageId.Error });
             }
-            var result = await UserManager.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
+            var result = await UserManager.AddLoginAsync(UserId, loginInfo.Login);
             if (result.Succeeded)
             {
                 return RedirectToAction("Manage");
@@ -389,7 +321,7 @@ namespace ChatR.Controllers
         [ChildActionOnly]
         public ActionResult RemoveAccountList()
         {
-            var linkedAccounts = UserManager.GetLogins(User.Identity.GetUserId());
+            var linkedAccounts = UserManager.GetLogins(UserId);
             ViewBag.ShowRemoveButton = HasPassword() || linkedAccounts.Count > 1;
             return (ActionResult)PartialView("_RemoveAccountPartial", linkedAccounts);
         }
@@ -433,7 +365,7 @@ namespace ChatR.Controllers
 
         private bool HasPassword()
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
+            var user = UserManager.FindById(UserId);
             if (user != null)
             {
                 return user.PasswordHash != null;

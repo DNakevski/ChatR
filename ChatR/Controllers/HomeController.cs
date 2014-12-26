@@ -6,22 +6,25 @@ using System.Web.Mvc;
 using ChatR.Models;
 using ChatR.Helpers.Filters;
 using ChatR.Entities;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace ChatR.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
-        [AuthorizeUser]
+
         public ActionResult Index()
         {
-            var user = (User)Session["User"];
-            ViewBag.UserName = user.UserName;
+
+            ViewBag.UserName = User.Identity.Name;
             return View();
         }
 
-        [AuthorizeUser]
         public ActionResult Chat()
         {
+            ViewBag.UserName = User.Identity.Name;
             return View();
         }
 
