@@ -304,9 +304,7 @@ namespace ChatR.Controllers
         [AllowAnonymous]
         public ActionResult LogOff()
         {
-            //AuthenticationManager.SignOut();
-            //return RedirectToAction("Index", "Home");
-            Session.Abandon();
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Login");
         }
 

@@ -1,6 +1,11 @@
 ﻿body {
 }
 
+.bg-white{
+    background-color: #FFF;
+}
+
+/*--- CUSTOM VALIDATION STYLE ---*/
 .validation-summary-errors {
     font-size: 12px;
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
@@ -19,3 +24,64 @@
         margin-bottom: 0px;
         padding-bottom: 0px;
     }
+/*--- END OF CUSTOM VALIDATION STYLE ---*/
+/*--- CUSTOM SIDE MENU ---*/
+.bg-gray{
+    background-color: #4d5b69;
+}
+
+.bg-gray .nav-user{
+    background-color: #2D87C1;
+    
+}
+
+.user-name{
+    color: #FEFEFE;
+}
+
+.nav > li {
+    border-top: 1px solid #536372;
+}
+
+
+
+.bg-gray .nav-primary ul.nav > li > a{
+    padding: 14px 15px;
+    color: #e8e8e8;
+}
+
+.bg-gray .nav-primary > ul.nav-main > li.active > a
+{
+    background-color:#44515d;
+}
+
+.bg-gray .nav-primary ul.nav > li a:hover{
+    background-color: #495663; /*#2D87C1 ;*/
+}
+
+.bg-gray .nav-primary ul.nav > li li a {
+    background-color: #4d5b69;
+}
+
+.bg-gray .nav-primary ul.nav > li li a:hover {
+    font-weight: normal;
+    text-transform: none;
+    color: #8cacc3;
+}
+.bg-gray .nav-primary ul.nav > li li a {
+    padding: 10px 15px;
+}
+
+@media (min-width: 768px) {
+    .nav-xs .nav-primary > ul > li > a span {
+        display: table-cell;
+        vertical-align: middle;
+        height: 35px;
+        width: 70px;
+    }
+
+    .nav-xs .nav-primary > ul > li > a i{
+        line-height: 35px;
+    }
+}
+/*--- END OF CUSTOM SIDE MENU ---*/

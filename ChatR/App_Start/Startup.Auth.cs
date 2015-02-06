@@ -1,4 +1,5 @@
-﻿using ChatR.Models;
+﻿using ChatR.Entities;
+using ChatR.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;

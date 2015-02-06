@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="~/Content/ScaleTheme/css/font.css" type="text/css" />
     <link rel="stylesheet" href="~/Content/ScaleTheme/css/app.css" type="text/css" />
     <link rel="stylesheet" href="~/Content/ScaleTheme/js/calendar/bootstrap_calendar.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/ScaleTheme/css/custom.css" type="text/css" />
     @RenderSection("styles", false)
     <!--[if lt IE 9]>
       <script src="~/Content/ScaleTheme/js/ie/html5shiv.js"></script>
@@ -155,7 +156,7 @@
                         <span class="thumb-sm avatar pull-left">
                             <img src="~/Content/ScaleTheme/images/a0.png" alt="...">
                         </span>
-                        John.Smith <b class="caret"></b>
+                       @Context.User.Identity.Name <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu animated fadeInRight">
                         <li>
@@ -185,7 +186,7 @@
         <section>
             <section class="hbox stretch">
                 <!-- .aside -->
-                <aside class="bg-black aside-md hidden-print" id="nav">
+                <aside class="bg-gray aside-md hidden-print" id="nav">
                     <section class="vbox">
                         <section class="w-f scrollable">
                             <div class="slim-scroll" data-height="auto" data-disable-fade-out="true" data-distance="0" data-size="10px" data-railopacity="0.2">
@@ -197,8 +198,8 @@
                                                 <i class="on md b-black"></i>
                                             </span>
                                             <span class="hidden-nav-xs clear">
-                                                <span class="block m-t-xs">
-                                                    <strong class="font-bold text-lt">John.Smith</strong>
+                                                <span class="block m-t-xs user-name">
+                                                    <strong class="font-bold text-lt">@Context.User.Identity.Name</strong>
                                                     <b class="caret"></b>
                                                 </span>
                                                 <span class="text-muted text-xs block">Art Director</span>
@@ -223,7 +224,7 @@
                                             </li>
                                             <li class="divider"></li>
                                             <li>
-                                                <a href="modal.lockme.html" data-toggle="ajaxModal">Logout</a>
+                                                <a href="@Url.Action("LogOff", "Account")" data-toggle="ajaxModal">Logout</a>
                                             </li>
                                         </ul>
                                     </div>

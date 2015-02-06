@@ -181,6 +181,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Entities\ApplicationDbContext.cs" />
     <Compile Include="Helpers\Filters\AuthorizeUser.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -188,29 +189,14 @@
     <Compile Include="Helpers\Hash\HashGenerator.cs" />
     <Compile Include="Helpers\Hash\PBKDF2.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
+    <Compile Include="Migrations\201502061621008_InitialCreate.cs" />
+    <Compile Include="Migrations\201502061621008_InitialCreate.Designer.cs">
+      <DependentUpon>201502061621008_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Entities\ChatREntities.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ChatREntities.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entities\ChatREntities.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ChatREntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entities\ChatREntities.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ChatREntities.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Entities\Message.cs">
-      <DependentUpon>ChatREntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entities\User.cs">
-      <DependentUpon>ChatREntities.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\Message.cs" />
     <Compile Include="Persistence\UserConnectionMapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -220,6 +206,7 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\custom.css" />
     <Content Include="Content\ScaleTheme\css\animate.css" />
     <Content Include="Content\ScaleTheme\css\app.css" />
     <Content Include="Content\ScaleTheme\css\bootstrap.css" />
@@ -354,24 +341,9 @@
     <Content Include="Content\ScaleTheme\less\app.widgets.less" />
     <Content Include="Content\ScaleTheme\less\less.php" />
     <Content Include="Content\ScaleTheme\less\lessc.inc.php" />
-    <EntityDeploy Include="Entities\ChatREntities.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ChatREntities.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Entities\ChatREntities.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ChatREntities.edmx</DependentUpon>
-      <LastGenOutput>ChatREntities.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Entities\ChatREntities.edmx.diagram">
-      <DependentUpon>ChatREntities.edmx</DependentUpon>
-    </Content>
-    <Content Include="Entities\ChatREntities.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ChatREntities.edmx</DependentUpon>
-      <LastGenOutput>ChatREntities.cs</LastGenOutput>
-    </Content>
+    <None Include="Properties\PublishProfiles\ChatR - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\ChatR - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\ChatR - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\ChatR - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -431,6 +403,11 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201502061621008_InitialCreate.resx">
+      <DependentUpon>201502061621008_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

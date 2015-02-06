@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web;
 using ChatR.Models;
 using System.Threading.Tasks;
+using ChatR.Entities;
 
 namespace ChatR.Models
 {

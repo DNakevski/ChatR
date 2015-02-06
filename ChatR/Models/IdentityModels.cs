@@ -8,6 +8,9 @@ namespace ChatR.Models
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser<int, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>
     {
+        //custom fields
+        public string Avatar { get; set; }
+
         public ClaimsIdentity GenerateUserIdentity(UserManager<ApplicationUser, int> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -22,18 +25,6 @@ namespace ChatR.Models
         }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>
-    {
-        public ApplicationDbContext()
-            : base("ChatRConnection")
-        {
-        }
-
-        public static ApplicationDbContext Create()
-        {
-            return new ApplicationDbContext();
-        }
-    }
 
     /// <summary>
     /// ApplicationRole in IdentityConfig.cs
