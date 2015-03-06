@@ -239,6 +239,7 @@
     <Content Include="Content\ScaleTheme\images\p7.jpg" />
     <Content Include="Content\ScaleTheme\images\p8.jpg" />
     <Content Include="Content\ScaleTheme\images\p9.jpg" />
+    <Content Include="Content\ScaleTheme\images\pattern.png" />
     <Content Include="Content\ScaleTheme\js\app.js" />
     <Content Include="Content\ScaleTheme\js\app.plugin.js" />
     <Content Include="Content\ScaleTheme\js\bootstrap.js" />
