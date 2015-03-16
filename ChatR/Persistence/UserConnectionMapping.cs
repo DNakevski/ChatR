@@ -43,6 +43,15 @@ namespace ChatR.Persistence
             }
         }
 
+        public IEnumerable<T> GetKeys()
+        {
+            var keys = _connections.Keys.ToList<T>();
+            if (keys.Count == 0)
+                return Enumerable.Empty<T>();
+
+            return keys;
+        }
+
         public IEnumerable<string> GetConnections(T key)
         {
             HashSet<string> connections;

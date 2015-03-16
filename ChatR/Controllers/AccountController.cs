@@ -9,7 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using ChatR.UnitOfWork;
+using ChatR.UWork;
 using ChatR.Models;
 using ChatR.Entities;
 using ChatR.Helpers.Hash;

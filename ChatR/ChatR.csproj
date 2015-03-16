@@ -195,13 +195,16 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ConnectedUserModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\Message.cs" />
+    <Compile Include="Entities\Message.cs" />
     <Compile Include="Persistence\UserConnectionMapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="UnitOfWork\GenericRepository.cs" />
     <Compile Include="UnitOfWork\UnitOfWork.cs" />
+    <Compile Include="WorkerService\BaseWorkerService.cs" />
+    <Compile Include="WorkerService\UserWorkerService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />

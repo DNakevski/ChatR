@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ChatR.Models;
 using ChatR.Entities;
 using ChatR.Persistence;
+using ChatR.WorkerService;
 
 namespace ChatR.Hubs
 {
@@ -20,6 +21,18 @@ namespace ChatR.Hubs
             Clients.All.addNewMessageToPage(message);
         }
 
+        public List<ConnectedUserModel> GetAllConectedUsers()
+        {
+            List<int> keys = _connections.GetKeys().ToList();
+
+            using (var userService = new UserWorkerService())
+            {
+                var users = userService.GetUsersByIds(keys);
+                return users;
+            }
+        }
+
+        #region Connection Events
         public override Task OnConnected()
         {
             string connectionId = Context.ConnectionId;
@@ -50,6 +63,7 @@ namespace ChatR.Hubs
 
             return base.OnReconnected();
         }
+        #endregion
 
     }
 }

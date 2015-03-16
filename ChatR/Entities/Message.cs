@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace ChatR.Models
+namespace ChatR.Entities
 {
     public class Message
     {
