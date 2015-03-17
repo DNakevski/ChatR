@@ -16,7 +16,7 @@ namespace ChatR.Hubs
     {
         private readonly static UserConnectionMapping<int> _connections = UserConnectionMapping<int>.GetInstance();
 
-        public void Send(Message message)
+        public void Send(ChatMessageModel message)
         {
             Clients.All.addNewMessageToPage(message);
         }

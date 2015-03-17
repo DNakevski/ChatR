@@ -32,6 +32,7 @@
             $("#messageForm").submit(function (e) {
                 var name = $("#displayname").val();
                 var text = $("#messageContainer").val();
+                
                 var message = { Name: name, MessageText: text }
                 chat.SendMessage(message);
 
