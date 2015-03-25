@@ -10,7 +10,8 @@ $(function () {
         var settings = $.extend(true, {
             container: "chatContainer",
             messageContainer: "messageContainer",
-            nameContainer: "displayname"
+            nameContainer: "displayname",
+            currentUser: ""
         }, options);
 
         if (typeof (options) == "undefined" || options == null) { options = {}; }
@@ -96,7 +97,7 @@ $(function () {
             addMessage: function (message) {
                 // Add the message to the page.
                 var html = "";
-                if (message.Name == $("#" + settings.nameContainer).val()) {
+                if (message.Name == settings.currentUser) {
                     html = generator.generateMessage("sending", message.Name, message.MessageText);
                 }
                 else {
@@ -127,8 +128,11 @@ $(function () {
             getConnectedUsers: function () {
                 chat.server.getAllConectedUsers().done(function (data) {
                     $.each(data, function () {
-                        var html = generator.generateContactInfo(this.UserName, this.Avatar);
-                        $("#sidebar ul.list-group").append(html);
+                        if (this.UserName != settings.currentUser){
+                            var html = generator.generateContactInfo(this.UserName, this.Avatar);
+                            $("#sidebar ul.list-group").append(html);
+                        }
+                        
                     });
                 });
             }

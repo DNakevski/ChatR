@@ -48,7 +48,6 @@ namespace ChatR.Persistence
             var keys = _connections.Keys.ToList<T>();
             if (keys.Count == 0)
                 return Enumerable.Empty<T>();
-
             return keys;
         }
 

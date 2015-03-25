@@ -24,7 +24,8 @@
             var chat = $.chatPlugin({
                 container: "chatContainer",
                 messageContainer: "messageContainer",
-                nameContainer: "displayname"
+                nameContainer: "displayname",
+                currentUser: username
             });
 
             chat.Init();
@@ -123,54 +124,7 @@
             <section class="scrollable">
                 <div class="wrapper"><strong>Friends</strong></div>
                 <ul class="list-group no-bg no-borders auto">
-                    <li class="list-group-item">
-                        <div class="media">
-                            <span class="pull-left thumb-sm avatar">
-                                <img src="/Content/ScaleTheme/images/a3.png" alt="..." class="img-circle bg-white">
-                                <i class="on b-black bottom"></i>
-                            </span>
-                            <div class="media-body">
-                                <div><a href="#">Chris Fox</a></div>
-                                <small class="text-muted">about 2 minutes ago</small>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="media">
-                            <span class="pull-left thumb-sm avatar">
-                                <img src="/Content/ScaleTheme/images/a3.png" alt="..." class="bg-white">
-                                <i class="on b-black bottom"></i>
-                            </span>
-                            <div class="media-body">
-                                <div><a href="#">Amanda Conlan</a></div>
-                                <small class="text-muted">about 2 hours ago</small>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="media">
-                            <span class="pull-left thumb-sm avatar">
-                                <img src="/Content/ScaleTheme/images/a3.png" alt="..." class="bg-white">
-                                <i class="busy b-black bottom"></i>
-                            </span>
-                            <div class="media-body">
-                                <div><a href="#">Dan Doorack</a></div>
-                                <small class="text-muted">3 days ago</small>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="media">
-                            <span class="pull-left thumb-sm avatar">
-                                <img src="/Content/ScaleTheme/images/a3.png" alt="..." class="bg-white">
-                                <i class="away b-black bottom"></i>
-                            </span>
-                            <div class="media-body">
-                                <div><a href="#">Lauren Taylor</a></div>
-                                <small class="text-muted">about 2 minutes ago</small>
-                            </div>
-                        </div>
-                    </li>
+                    
                 </ul>
             </section>
         </section>
