@@ -9,12 +9,19 @@ using ChatR.Models;
 using ChatR.Entities;
 using ChatR.Persistence;
 using ChatR.WorkerService;
+using ChatR.Infrastructure;
 
 namespace ChatR.Hubs
 {
     public class ChatHub : Hub
     {
         private readonly static UserConnectionMapping<int> _connections = UserConnectionMapping<int>.GetInstance();
+        private readonly ClientNotifier _clientNotifier;
+
+        public ChatHub()
+        {
+            _clientNotifier = new ClientNotifier();
+        }
 
         public void Send(ChatMessageModel message)
         {
@@ -27,7 +34,7 @@ namespace ChatR.Hubs
 
             using (var userService = new UserWorkerService())
             {
-                var users = userService.GetUsersByIds(keys);
+                var users = userService.GetConnectedUsersByIds(keys);
                 return users;
             }
         }
@@ -38,7 +45,7 @@ namespace ChatR.Hubs
             string connectionId = Context.ConnectionId;
             int userId = Context.User.Identity.GetUserId<int>();
             _connections.Add(userId, connectionId);
-
+            _clientNotifier.NewUserConnected(userId);
             return base.OnConnected();
         }
 
@@ -47,6 +54,7 @@ namespace ChatR.Hubs
             string connectionId = Context.ConnectionId;
             int userId = Context.User.Identity.GetUserId<int>();
             _connections.Remove(userId, connectionId);
+            _clientNotifier.UserDisconnected(userId);
 
             return base.OnDisconnected(stopCalled);
         }

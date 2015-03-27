@@ -74,16 +74,16 @@ $(function () {
                 return html;
             },
 
-            generateContactInfo: function (name, avatar) {
+            generateContactInfo: function (user) {
                 var html = "";
-                html += "<li class='list-group-item'>";
+                html += "<li class='list-group-item' user='" + user.UserID + "'>";
                 html += "<div class='media'>";
                 html += "<span class='pull-left thumb-sm avatar'>";
                 html += "<img class='bg-white' alt='...' src='/Content/ScaleTheme/images/a3.png'>";
-                html += "<i class='away b-black bottom'></i>";
+                html += "<i class='on b-black bottom'></i>";
                 html += "</span>"
                 html += "<div class='media-body'>";
-                html += "<div><a href='#'>"+ name +"</a></div>";
+                html += "<div><a href='#'>"+ user.UserName +"</a></div>";
                 html += "<small class='text-muted'>0 seconds ago</small>";
                 html += "</div>"
                 html += "</div>";
@@ -108,7 +108,21 @@ $(function () {
                 //scroll to the bottom of the container
                 var scrollTo = $("#" + settings.container)[0].scrollHeight + 50;
                 $("#" + settings.container).slimScroll({ scrollTo: scrollTo });
+            },
+
+            activateUser: function (user) {
+                var html = generator.generateContactInfo(user);
+                $("#sidebar ul.list-group").append(html);
+            },
+
+            deactivateUser: function (userId) {
+                var container = $("#sidebar li[user='" + userId + "']");
+                if(container.length !== 0)
+                {
+                    container.remove();
+                }
             }
+
         }
 
         var transport = {
@@ -129,8 +143,7 @@ $(function () {
                 chat.server.getAllConectedUsers().done(function (data) {
                     $.each(data, function () {
                         if (this.UserName != settings.currentUser){
-                            var html = generator.generateContactInfo(this.UserName, this.Avatar);
-                            $("#sidebar ul.list-group").append(html);
+                            uiManager.activateUser(this);
                         }
                         
                     });
@@ -142,7 +155,9 @@ $(function () {
             Init: n.init,
             GetChat: n.getChat,
             SendMessage: transport.sendMessage,
-            AddMessage: uiManager.addMessage
+            AddMessage: uiManager.addMessage,
+            ActivateUser: uiManager.activateUser,
+            DeactivateUser: uiManager.deactivateUser
         };
     };
            

@@ -14,10 +14,9 @@ namespace ChatR.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-
         public ActionResult Index()
         {
-
+            
             ViewBag.UserName = User.Identity.Name;
             return View();
         }
